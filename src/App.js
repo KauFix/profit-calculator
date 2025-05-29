@@ -135,6 +135,24 @@ export default function ProfitCalculator() {
         >
           <FaCog className="text-white" /> Calculează
         </button>
+<button
+  onClick={() => {
+    setPricePerUnit(0);
+    setSellingPrice(0);
+    setQuantity(1);
+    setTransportCost(0);
+    setTva(19);
+    setCustomTax(0);
+    setEmagFee(0);
+    setOtherCosts(0);
+    setMinMargin(40);
+    setResults(null);
+  }}
+  className="w-full bg-gray-400 hover:bg-gray-500 text-white py-2 rounded-lg font-semibold transition duration-300 mt-2"
+>
+  🔄 Resetează
+</button>
+
 
         {results && (
           <div className={`mt-4 p-4 rounded-lg text-sm font-medium border ${
