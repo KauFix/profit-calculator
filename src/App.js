@@ -1,6 +1,32 @@
 import { useState } from "react";
 
 export default function ProfitCalculator() {
+  const [passwordInput, setPasswordInput] = useState("");
+const [authenticated, setAuthenticated] = useState(false);
+
+const handleLogin = () => {
+  if (passwordInput === "LEO90") {
+    setAuthenticated(true);
+  } else {
+    alert("Parolă greșită!");
+  }
+};
+
+if (!authenticated) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "100px" }}>
+      <h2>Introdu parola pentru a accesa aplicația</h2>
+      <input
+        type="password"
+        value={passwordInput}
+        onChange={(e) => setPasswordInput(e.target.value)}
+        placeholder="Parolă"
+      />
+      <button onClick={handleLogin} style={{ marginTop: "10px" }}>Intră</button>
+    </div>
+  );
+}
+
   const [pricePerUnit, setPricePerUnit] = useState(0);
   const [sellingPrice, setSellingPrice] = useState(0);
   const [quantity, setQuantity] = useState(1);
