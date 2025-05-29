@@ -10,7 +10,8 @@ import {
   FaTools,
   FaCog,
   FaBroom,
-  FaTrashAlt
+  FaTrashAlt,
+  FaClock
 } from "react-icons/fa";
 
 export default function ProfitCalculator() {
@@ -27,6 +28,7 @@ export default function ProfitCalculator() {
   const [emagFee, setEmagFee] = useState(0);
   const [otherCosts, setOtherCosts] = useState(0);
   const [minMargin, setMinMargin] = useState(40);
+  const [estimatedSalesPerDay, setEstimatedSalesPerDay] = useState(1);
   const [results, setResults] = useState(null);
   const [history, setHistory] = useState([]);
   const [selected, setSelected] = useState([]);
@@ -54,6 +56,7 @@ export default function ProfitCalculator() {
     const others = toNumber(otherCosts);
     const selling = toNumber(sellingPrice);
     const minMarginNum = toNumber(minMargin);
+    const salesPerDay = toNumber(estimatedSalesPerDay);
 
     if (quantityNum <= 0) {
       alert("Cantitatea trebuie să fie mai mare de 0.");
@@ -78,6 +81,8 @@ export default function ProfitCalculator() {
     if (estimatedProfit < 0) status = "pierdere";
     else if (profitMargin < minMarginNum) status = "sub marjă";
 
+    const daysToROI = salesPerDay > 0 ? Math.ceil(quantityNum / salesPerDay) : null;
+
     const result = {
       productName,
       costPerUnit: costPerUnit.toFixed(2),
@@ -86,6 +91,7 @@ export default function ProfitCalculator() {
       estimatedProfit: estimatedProfit.toFixed(2),
       profitMargin: profitMargin.toFixed(2),
       status,
+      daysToROI,
     };
 
     setResults(result);
@@ -103,6 +109,7 @@ export default function ProfitCalculator() {
     setEmagFee(0);
     setOtherCosts(0);
     setMinMargin(40);
+    setEstimatedSalesPerDay(1);
     setResults(null);
   };
 
@@ -186,6 +193,7 @@ export default function ProfitCalculator() {
           <InputField label="Comision eMAG (%)" value={emagFee} onChange={setEmagFee} icon={<FaShoppingCart className="text-pink-500" />} />
           <InputField label="Alte costuri (RON)" value={otherCosts} onChange={setOtherCosts} icon={<FaTools className="text-red-500" />} />
           <InputField label="Marjă minimă dorită (%)" value={minMargin} onChange={setMinMargin} icon={<FaPercentage className="text-black" />} />
+          <InputField label="Estimare vânzări/zi" value={estimatedSalesPerDay} onChange={setEstimatedSalesPerDay} icon={<FaClock className="text-indigo-500" />} />
         </div>
 
         <button
@@ -216,6 +224,9 @@ export default function ProfitCalculator() {
             <p>Venit total: {results.totalRevenue} RON</p>
             <p>Profit estimat: {results.estimatedProfit} RON</p>
             <p>Marjă profit: {results.profitMargin}%</p>
+            {results.daysToROI && (
+              <p>Timp estimat recuperare investiție: {results.daysToROI} zile</p>
+            )}
             <p>
               Status: <strong>{
                 results.status === "pierdere"
