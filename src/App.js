@@ -1,17 +1,4 @@
-import { FaMoneyBillWave, $1 from "react";
-import {
-  FaLock,
-  FaChartBar,
-  FaCog,
-  FaMoneyBillWave,
-  FaTag,
-  FaBoxes,
-  FaTruck,
-  FaPercentage,
-  FaWarehouse,
-  FaShoppingCart,
-  FaTools
-} from "react-icons/fa";
+import { FaEuroSign, $1 from "react-icons/fa";
 
 export default function ProfitCalculator() {
   const [passwordInput, setPasswordInput] = useState("");
