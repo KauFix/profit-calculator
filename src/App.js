@@ -10,8 +10,7 @@ import {
   FaTools,
   FaCog,
   FaBroom,
-  FaTrashAlt,
-  FaBalanceScale
+  FaTrashAlt
 } from "react-icons/fa";
 
 export default function ProfitCalculator() {
@@ -21,7 +20,6 @@ export default function ProfitCalculator() {
   const [productName, setProductName] = useState("");
   const [pricePerUnit, setPricePerUnit] = useState(0);
   const [sellingPrice, setSellingPrice] = useState(0);
-  const [competitorPrice, setCompetitorPrice] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [transportCost, setTransportCost] = useState(0);
   const [tva, setTva] = useState(19);
@@ -31,6 +29,7 @@ export default function ProfitCalculator() {
   const [minMargin, setMinMargin] = useState(40);
   const [results, setResults] = useState(null);
   const [history, setHistory] = useState([]);
+  const [selected, setSelected] = useState([]);
 
   const handleLogin = () => {
     if (passwordInput === "LEO90") {
@@ -55,7 +54,6 @@ export default function ProfitCalculator() {
     const others = toNumber(otherCosts);
     const selling = toNumber(sellingPrice);
     const minMarginNum = toNumber(minMargin);
-    const competitor = toNumber(competitorPrice);
 
     if (quantityNum <= 0) {
       alert("Cantitatea trebuie să fie mai mare de 0.");
@@ -80,15 +78,6 @@ export default function ProfitCalculator() {
     if (estimatedProfit < 0) status = "pierdere";
     else if (profitMargin < minMarginNum) status = "sub marjă";
 
-    let competitorStatus = null;
-    if (competitor > 0) {
-      const competitorRevenue = competitor * quantityNum;
-      const competitorProfit = competitorRevenue - totalCost - (competitor * emag / 100) * quantityNum;
-      const competitorMargin =
-        competitorRevenue === 0 ? 0 : (competitorProfit / competitorRevenue) * 100;
-      competitorStatus = competitorMargin >= minMarginNum ? "OK! Poți concura." : "Submarjă!";
-    }
-
     const result = {
       productName,
       costPerUnit: costPerUnit.toFixed(2),
@@ -97,8 +86,6 @@ export default function ProfitCalculator() {
       estimatedProfit: estimatedProfit.toFixed(2),
       profitMargin: profitMargin.toFixed(2),
       status,
-      competitorPrice: competitor,
-      competitorStatus
     };
 
     setResults(result);
@@ -109,7 +96,6 @@ export default function ProfitCalculator() {
     setProductName("");
     setPricePerUnit(0);
     setSellingPrice(0);
-    setCompetitorPrice(0);
     setQuantity(1);
     setTransportCost(0);
     setTva(19);
@@ -122,6 +108,39 @@ export default function ProfitCalculator() {
 
   const clearHistory = () => {
     setHistory([]);
+    setSelected([]);
+  };
+
+  const toggleSelect = (index) => {
+    setSelected((prev) =>
+      prev.includes(index)
+        ? prev.filter((i) => i !== index)
+        : [...prev, index].slice(-2)
+    );
+  };
+
+  const getComparison = () => {
+    if (selected.length !== 2) return null;
+    const [a, b] = selected.map((i) => history[i]);
+    return (
+      <div className="mt-4 p-4 bg-blue-50 border border-blue-300 rounded-lg">
+        <h4 className="font-bold text-lg mb-2 text-blue-700">Comparare produse:</h4>
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <p><strong>{a.productName}</strong></p>
+            <p>Cost unitar: {a.costPerUnit} RON</p>
+            <p>Profit: {a.estimatedProfit} RON</p>
+            <p>Marjă: {a.profitMargin}%</p>
+          </div>
+          <div>
+            <p><strong>{b.productName}</strong></p>
+            <p>Cost unitar: {b.costPerUnit} RON</p>
+            <p>Profit: {b.estimatedProfit} RON</p>
+            <p>Marjă: {b.profitMargin}%</p>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   if (!authenticated) {
@@ -160,7 +179,6 @@ export default function ProfitCalculator() {
           <InputField label="Nume produs" value={productName} onChange={setProductName} icon={<FaTag className="text-gray-600" />} />
           <InputField label="Preț achiziție / unitate (RON)" value={pricePerUnit} onChange={setPricePerUnit} icon={<FaTag className="text-blue-500" />} />
           <InputField label="Preț de vânzare (RON)" value={sellingPrice} onChange={setSellingPrice} icon={<FaTag className="text-black" />} />
-          <InputField label="Preț concurență (RON)" value={competitorPrice} onChange={setCompetitorPrice} icon={<FaBalanceScale className="text-purple-700" />} />
           <InputField label="Cantitate" value={quantity} onChange={setQuantity} icon={<FaBoxes className="text-yellow-600" />} />
           <InputField label="Transport total (RON)" value={transportCost} onChange={setTransportCost} icon={<FaTruck className="text-orange-500" />} />
           <InputField label="TVA (%)" value={tva} onChange={setTva} icon={<FaPercentage className="text-purple-600" />} />
@@ -198,18 +216,15 @@ export default function ProfitCalculator() {
             <p>Venit total: {results.totalRevenue} RON</p>
             <p>Profit estimat: {results.estimatedProfit} RON</p>
             <p>Marjă profit: {results.profitMargin}%</p>
-            <p>Status: <strong>{
-              results.status === "pierdere"
-                ? "Pierdere!"
-                : results.status === "sub marjă"
-                ? "Sub marja minimă!"
-                : "Profitabil!"
-            }</strong></p>
-            {results.competitorPrice > 0 && (
-              <p className="mt-2">
-                Concurență ({results.competitorPrice} RON): <strong>{results.competitorStatus}</strong>
-              </p>
-            )}
+            <p>
+              Status: <strong>{
+                results.status === "pierdere"
+                  ? "Pierdere!"
+                  : results.status === "sub marjă"
+                  ? "Sub marja minimă!"
+                  : "Profitabil!"
+              }</strong>
+            </p>
           </div>
         )}
 
@@ -226,11 +241,20 @@ export default function ProfitCalculator() {
             </h3>
             <ul className="space-y-1 text-sm">
               {history.map((item, idx) => (
-                <li key={idx} className="border p-2 rounded-md bg-gray-50">
-                  <strong>{item.productName}</strong>: {item.estimatedProfit} RON profit, {item.profitMargin}% marjă – <em>{item.status}</em>
+                <li key={idx} className="border p-2 rounded-md bg-gray-50 flex justify-between items-center">
+                  <div>
+                    <input
+                      type="checkbox"
+                      checked={selected.includes(idx)}
+                      onChange={() => toggleSelect(idx)}
+                      className="mr-2"
+                    />
+                    <strong>{item.productName}</strong>: {item.estimatedProfit} RON profit, {item.profitMargin}% marjă – <em>{item.status}</em>
+                  </div>
                 </li>
               ))}
             </ul>
+            {getComparison()}
           </div>
         )}
       </div>
