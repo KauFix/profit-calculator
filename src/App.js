@@ -4,6 +4,16 @@ export default function ProfitCalculator() {
   const [passwordInput, setPasswordInput] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
 
+  const [pricePerUnit, setPricePerUnit] = useState(0);
+  const [sellingPrice, setSellingPrice] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [transportCost, setTransportCost] = useState(0);
+  const [tva, setTva] = useState(19);
+  const [customTax, setCustomTax] = useState(0);
+  const [emagFee, setEmagFee] = useState(0);
+  const [otherCosts, setOtherCosts] = useState(0);
+  const [results, setResults] = useState(null);
+
   const handleLogin = () => {
     if (passwordInput === "LEO90") {
       setAuthenticated(true);
@@ -11,32 +21,6 @@ export default function ProfitCalculator() {
       alert("Parolă greșită!");
     }
   };
-
-  if (!authenticated) {
-    return (
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "100px" }}>
-        <h2>Introdu parola pentru a accesa aplicația</h2>
-        <input
-          type="password"
-          value={passwordInput}
-          onChange={(e) => setPasswordInput(e.target.value)}
-          placeholder="Parolă"
-          style={{ padding: "8px", marginTop: "10px" }}
-        />
-        <button onClick={handleLogin} style={{ marginTop: "10px", padding: "8px 16px" }}>Intră</button>
-      </div>
-    );
-  }
-
-  const [pricePerUnit, setPricePerUnit] = useState("");
-  const [sellingPrice, setSellingPrice] = useState("");
-  const [quantity, setQuantity] = useState("1");
-  const [transportCost, setTransportCost] = useState("");
-  const [tva, setTva] = useState("19");
-  const [customTax, setCustomTax] = useState("");
-  const [emagFee, setEmagFee] = useState("");
-  const [otherCosts, setOtherCosts] = useState("");
-  const [results, setResults] = useState(null);
 
   const toNumber = (value) => {
     const num = parseFloat(value);
@@ -79,6 +63,22 @@ export default function ProfitCalculator() {
       profitMargin: profitMargin.toFixed(2),
     });
   };
+
+  if (!authenticated) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "100px" }}>
+        <h2>Introdu parola pentru a accesa aplicația</h2>
+        <input
+          type="password"
+          value={passwordInput}
+          onChange={(e) => setPasswordInput(e.target.value)}
+          placeholder="Parolă"
+          style={{ padding: "8px", marginTop: "10px" }}
+        />
+        <button onClick={handleLogin} style={{ marginTop: "10px", padding: "8px 16px" }}>Intră</button>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 max-w-md mx-auto">
