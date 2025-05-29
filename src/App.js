@@ -3,7 +3,7 @@ import {
   FaLock,
   FaChartBar,
   FaCog,
-  FaMoneyBillWave,
+  FaRegMoneyBillAlt,
   FaTag,
   FaBoxes,
   FaTruck,
