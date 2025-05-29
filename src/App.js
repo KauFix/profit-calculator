@@ -89,7 +89,7 @@ export default function ProfitCalculator() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4">
         <div className="bg-white shadow-md rounded-xl p-6 w-full max-w-sm">
           <h2 className="text-lg font-semibold mb-4 text-center flex items-center justify-center gap-2">
-            <FaLock /> Introdu parola
+            <FaLock className="text-gray-500" /> Introdu parola
           </h2>
           <input
             type="password"
@@ -113,18 +113,18 @@ export default function ProfitCalculator() {
     <div className="min-h-screen bg-gray-100 py-8 px-4">
       <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-6 space-y-4">
         <h1 className="text-2xl font-bold text-center mb-4 flex items-center justify-center gap-2">
-          <FaChartBar /> Calculator Profit
+          <FaChartBar className="text-green-600" /> Calculator Profit
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <InputField icon={<FaTag />} label="Preț achiziție / unitate (RON)" value={pricePerUnit} onChange={setPricePerUnit} />
+          <InputField icon={<FaTag className="text-blue-500" />} label="Preț achiziție / unitate (RON)" value={pricePerUnit} onChange={setPricePerUnit} />
           <InputField icon={<FaTag />} label="Preț de vânzare (RON)" value={sellingPrice} onChange={setSellingPrice} />
-          <InputField icon={<FaBoxes />} label="Cantitate" value={quantity} onChange={setQuantity} />
-          <InputField icon={<FaTruck />} label="Transport total (RON)" value={transportCost} onChange={setTransportCost} />
-          <InputField icon={<FaPercentage />} label="TVA (%)" value={tva} onChange={setTva} />
-          <InputField icon={<FaWarehouse />} label="Taxă vamală (%)" value={customTax} onChange={setCustomTax} />
-          <InputField icon={<FaShoppingCart />} label="Comision eMAG (%)" value={emagFee} onChange={setEmagFee} />
-          <InputField icon={<FaTools />} label="Alte costuri (RON)" value={otherCosts} onChange={setOtherCosts} />
+          <InputField icon={<FaBoxes className="text-yellow-600" />} label="Cantitate" value={quantity} onChange={setQuantity} />
+          <InputField icon={<FaTruck className="text-orange-500" />} label="Transport total (RON)" value={transportCost} onChange={setTransportCost} />
+          <InputField icon={<FaPercentage className="text-purple-600" />} label="TVA (%)" value={tva} onChange={setTva} />
+          <InputField icon={<FaWarehouse className="text-gray-700" />} label="Taxă vamală (%)" value={customTax} onChange={setCustomTax} />
+          <InputField icon={<FaShoppingCart className="text-pink-500" />} label="Comision eMAG (%)" value={emagFee} onChange={setEmagFee} />
+          <InputField icon={<FaTools className="text-red-500" />} label="Alte costuri (RON)" value={otherCosts} onChange={setOtherCosts} />
         </div>
 
         <InputField icon={<FaPercentage />} label="Marjă minimă dorită (%)" value={minMargin} onChange={setMinMargin} />
@@ -133,7 +133,7 @@ export default function ProfitCalculator() {
           onClick={calculateProfit}
           className="w-full bg-green-600 hover:brightness-110 text-white py-2 rounded-lg font-semibold transition duration-300 mt-2 flex items-center justify-center gap-2"
         >
-          <FaCog /> Calculează
+          <FaCog className="text-white" /> Calculează
         </button>
 
         {results && (
