@@ -1,16 +1,5 @@
-import { useState } from "react";
-import {
-  FaLock,
-  FaChartBar,
-  FaCog,
-  FaTag,
-  FaBoxes,
-  FaTruck,
-  FaPercentage,
-  FaWarehouse,
-  FaShoppingCart,
-  FaTools
-} from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { FaChartBar, FaTag, FaBoxes, FaTruck, FaPercentage, FaWarehouse, FaShoppingCart, FaTools, FaCog, FaLock } from "react-icons/fa";
 
 export default function ProfitCalculator() {
   const [passwordInput, setPasswordInput] = useState("");
@@ -26,6 +15,7 @@ export default function ProfitCalculator() {
   const [otherCosts, setOtherCosts] = useState(0);
   const [minMargin, setMinMargin] = useState(40);
   const [results, setResults] = useState(null);
+  const [history, setHistory] = useState([]);
 
   const handleLogin = () => {
     if (passwordInput === "LEO90") {
@@ -74,14 +64,17 @@ export default function ProfitCalculator() {
     if (estimatedProfit < 0) status = "pierdere";
     else if (profitMargin < minMarginNum) status = "sub marjă";
 
-    setResults({
+    const resultData = {
       costPerUnit: costPerUnit.toFixed(2),
       totalCost: totalCost.toFixed(2),
       totalRevenue: totalRevenue.toFixed(2),
       estimatedProfit: estimatedProfit.toFixed(2),
       profitMargin: profitMargin.toFixed(2),
       status,
-    });
+    };
+
+    setResults(resultData);
+    setHistory((prev) => [resultData, ...prev.slice(0, 9)]);
   };
 
   if (!authenticated) {
@@ -118,7 +111,7 @@ export default function ProfitCalculator() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <InputField icon={<FaTag className="text-blue-500" />} label="Preț achiziție / unitate (RON)" value={pricePerUnit} onChange={setPricePerUnit} />
-          <InputField icon={<FaTag />} label="Preț de vânzare (RON)" value={sellingPrice} onChange={setSellingPrice} />
+          <InputField icon={<FaTag className="text-blue-500" />} label="Preț de vânzare (RON)" value={sellingPrice} onChange={setSellingPrice} />
           <InputField icon={<FaBoxes className="text-yellow-600" />} label="Cantitate" value={quantity} onChange={setQuantity} />
           <InputField icon={<FaTruck className="text-orange-500" />} label="Transport total (RON)" value={transportCost} onChange={setTransportCost} />
           <InputField icon={<FaPercentage className="text-purple-600" />} label="TVA (%)" value={tva} onChange={setTva} />
@@ -127,7 +120,7 @@ export default function ProfitCalculator() {
           <InputField icon={<FaTools className="text-red-500" />} label="Alte costuri (RON)" value={otherCosts} onChange={setOtherCosts} />
         </div>
 
-        <InputField icon={<FaPercentage />} label="Marjă minimă dorită (%)" value={minMargin} onChange={setMinMargin} />
+        <InputField icon={<FaPercentage className="text-purple-600" />} label="Marjă minimă dorită (%)" value={minMargin} onChange={setMinMargin} />
 
         <button
           onClick={calculateProfit}
@@ -135,24 +128,24 @@ export default function ProfitCalculator() {
         >
           <FaCog className="text-white" /> Calculează
         </button>
-<button
-  onClick={() => {
-    setPricePerUnit(0);
-    setSellingPrice(0);
-    setQuantity(1);
-    setTransportCost(0);
-    setTva(19);
-    setCustomTax(0);
-    setEmagFee(0);
-    setOtherCosts(0);
-    setMinMargin(40);
-    setResults(null);
-  }}
-  className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-semibold transition duration-300 mt-2 flex items-center justify-center gap-2"
->
-  <FaCog className="text-white" /> Resetează
-</button>
 
+        <button
+          onClick={() => {
+            setPricePerUnit(0);
+            setSellingPrice(0);
+            setQuantity(1);
+            setTransportCost(0);
+            setTva(19);
+            setCustomTax(0);
+            setEmagFee(0);
+            setOtherCosts(0);
+            setMinMargin(40);
+            setResults(null);
+          }}
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-semibold transition duration-300 mt-2 flex items-center justify-center gap-2"
+        >
+          <FaCog className="text-white" /> Resetează
+        </button>
 
         {results && (
           <div className={`mt-4 p-4 rounded-lg text-sm font-medium border ${
@@ -176,6 +169,19 @@ export default function ProfitCalculator() {
                   : "Profitabil!"
               }</strong>
             </p>
+          </div>
+        )}
+
+        {history.length > 0 && (
+          <div className="mt-6">
+            <h2 className="text-lg font-semibold mb-2">Istoric ultimele 10 calcule:</h2>
+            <ul className="text-sm space-y-1 list-disc list-inside">
+              {history.map((item, index) => (
+                <li key={index}>
+                  Profit: {item.estimatedProfit} RON – Marjă: {item.profitMargin}% – {item.status}
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </div>
