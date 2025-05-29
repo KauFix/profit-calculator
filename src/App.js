@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { FaMoneyBillWave, $1 from "react";
 import {
   FaLock,
   FaChartBar,
   FaCog,
-  FaRegMoneyBillAlt,
+  FaMoneyBillWave,
   FaTag,
   FaBoxes,
   FaTruck,
