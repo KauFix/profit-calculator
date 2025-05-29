@@ -140,5 +140,12 @@ export default function ProfitCalculator() {
     );
   }
 
-  return <div className="min-h-screen"> {/* Restul aplicației */} </div>;
-}
+  return (
+    <div className="min-h-screen bg-gray-100 p-4">
+      {/* Restul aplicației tale vine aici: form, rezultate, istoric etc. */}
+      <h1 className="text-center font-bold text-xl mb-4 flex items-center justify-center gap-2">
+        <FaChartBar /> Calculator Profit
+      </h1>
+    </div>
+  );
+} 
