@@ -148,9 +148,9 @@ export default function ProfitCalculator() {
     setMinMargin(40);
     setResults(null);
   }}
-  className="w-full bg-gray-400 hover:bg-gray-500 text-white py-2 rounded-lg font-semibold transition duration-300 mt-2"
+  className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-semibold transition duration-300 mt-2 flex items-center justify-center gap-2"
 >
-  🔄 Resetează
+  <FaCog className="text-white" /> Resetează
 </button>
 
 
