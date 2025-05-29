@@ -1,13 +1,6 @@
 import { useState } from "react";
 import {
   FaLock,
-  FaEuroSign,
-  FaTag,
-  FaBox,
-  FaTruck,
-  FaPercent,
-  FaWarehouse,
-  FaShoppingCart,
   FaCog,
   FaChartBar,
 } from "react-icons/fa";
@@ -111,74 +104,42 @@ export default function ProfitCalculator() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <InputField
-            label={
-              <>
-                <FaEuroSign className="inline mr-2" /> Preț achiziție/unitate
-              </>
-            }
+            label="💸 Preț achiziție/unitate (RON)"
             value={pricePerUnit}
             onChange={setPricePerUnit}
           />
           <InputField
-            label={
-              <>
-                <FaTag className="inline mr-2" /> Preț de vânzare
-              </>
-            }
+            label="💰 Preț de vânzare (RON)"
             value={sellingPrice}
             onChange={setSellingPrice}
           />
           <InputField
-            label={
-              <>
-                <FaBox className="inline mr-2" /> Cantitate
-              </>
-            }
+            label="📦 Cantitate"
             value={quantity}
             onChange={setQuantity}
           />
           <InputField
-            label={
-              <>
-                <FaTruck className="inline mr-2" /> Transport total
-              </>
-            }
+            label="🚚 Transport total (RON)"
             value={transportCost}
             onChange={setTransportCost}
           />
           <InputField
-            label={
-              <>
-                <FaPercent className="inline mr-2" /> TVA (%)
-              </>
-            }
+            label="📊 TVA (%)"
             value={tva}
             onChange={setTva}
           />
           <InputField
-            label={
-              <>
-                <FaWarehouse className="inline mr-2" /> Taxă vamală (%)
-              </>
-            }
+            label="🏛️ Taxă vamală (%)"
             value={customTax}
             onChange={setCustomTax}
           />
           <InputField
-            label={
-              <>
-                <FaShoppingCart className="inline mr-2" /> Comision eMAG (%)
-              </>
-            }
+            label="🛒 Comision eMAG (%)"
             value={emagFee}
             onChange={setEmagFee}
           />
           <InputField
-            label={
-              <>
-                <FaCog className="inline mr-2" /> Alte costuri
-              </>
-            }
+            label="⚙️ Alte costuri (RON)"
             value={otherCosts}
             onChange={setOtherCosts}
           />
@@ -186,7 +147,7 @@ export default function ProfitCalculator() {
 
         <button
           onClick={calculateProfit}
-          className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-semibold transition duration-300 mt-4 flex items-center justify-center gap-2"
+          className="w-full bg-green-600 hover:brightness-110 text-white py-2 rounded-lg font-semibold transition duration-300 mt-4 flex items-center justify-center gap-2"
         >
           <FaCog /> Calculează Profitul
         </button>
@@ -194,24 +155,15 @@ export default function ProfitCalculator() {
         {results && (
           <div className="bg-gray-50 rounded-xl p-4 mt-6 border">
             <h2 className="font-bold mb-2 text-lg">📊 Rezultate</h2>
-            <Result
-              label="Cost per unitate"
-              value={results.costPerUnit + " lei"}
-            />
-            <Result label="Cost total" value={results.totalCost + " lei"} />
-            <Result
-              label="Venit total"
-              value={results.totalRevenue + " lei"}
-            />
+            <Result label="Cost per unitate" value={results.costPerUnit + " RON"} />
+            <Result label="Cost total" value={results.totalCost + " RON"} />
+            <Result label="Venit total" value={results.totalRevenue + " RON"} />
             <Result
               label="Profit estimat"
-              value={results.estimatedProfit + " lei"}
+              value={results.estimatedProfit + " RON"}
               highlight
             />
-            <Result
-              label="Marjă profit"
-              value={results.profitMargin + " %"}
-            />
+            <Result label="Marjă profit" value={results.profitMargin + " %"} />
           </div>
         )}
       </div>
@@ -227,7 +179,7 @@ function InputField({ label, value, onChange }) {
         type="number"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="border border-gray-300 rounded-lg p-2"
+        className="border border-gray-300 rounded-lg p-2 shadow-sm focus:ring focus:outline-none"
         min="0"
       />
     </div>
