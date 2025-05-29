@@ -1,9 +1,5 @@
 import { useState } from "react";
-import {
-  FaLock,
-  FaCog,
-  FaChartBar,
-} from "react-icons/fa";
+import { FaLock, FaChartBar, FaCog } from "react-icons/fa";
 
 export default function ProfitCalculator() {
   const [passwordInput, setPasswordInput] = useState("");
@@ -17,6 +13,7 @@ export default function ProfitCalculator() {
   const [customTax, setCustomTax] = useState(0);
   const [emagFee, setEmagFee] = useState(0);
   const [otherCosts, setOtherCosts] = useState(0);
+  const [minMargin, setMinMargin] = useState(40);
   const [results, setResults] = useState(null);
 
   const handleLogin = () => {
@@ -41,9 +38,10 @@ export default function ProfitCalculator() {
     const emag = toNumber(emagFee);
     const others = toNumber(otherCosts);
     const selling = toNumber(sellingPrice);
+    const minMarginNum = toNumber(minMargin);
 
     if (quantityNum <= 0) {
-      alert("Cantitatea trebuie să fie mai mare decât 0");
+      alert("Cantitatea trebuie să fie mai mare de 0.");
       return;
     }
 
@@ -61,12 +59,17 @@ export default function ProfitCalculator() {
     const profitMargin =
       totalRevenue === 0 ? 0 : (estimatedProfit / totalRevenue) * 100;
 
+    let status = "profitabil";
+    if (estimatedProfit < 0) status = "pierdere";
+    else if (profitMargin < minMarginNum) status = "sub marjă";
+
     setResults({
       costPerUnit: costPerUnit.toFixed(2),
       totalCost: totalCost.toFixed(2),
       totalRevenue: totalRevenue.toFixed(2),
       estimatedProfit: estimatedProfit.toFixed(2),
       profitMargin: profitMargin.toFixed(2),
+      status,
     });
   };
 
@@ -88,7 +91,7 @@ export default function ProfitCalculator() {
             onClick={handleLogin}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition duration-300"
           >
-            Intră în aplicație
+            Intră
           </button>
         </div>
       </div>
@@ -98,72 +101,49 @@ export default function ProfitCalculator() {
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4">
       <div className="max-w-xl mx-auto bg-white rounded-2xl shadow-xl p-6 space-y-4">
-        <h1 className="text-2xl font-bold text-center mb-2 flex items-center justify-center gap-2">
-          <FaChartBar /> Calculator de Profit
+        <h1 className="text-2xl font-bold text-center mb-4 flex items-center justify-center gap-2">
+          <FaChartBar /> Calculator Profit
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <InputField
-            label="💸 Preț achiziție/unitate (RON)"
-            value={pricePerUnit}
-            onChange={setPricePerUnit}
-          />
-          <InputField
-            label="💰 Preț de vânzare (RON)"
-            value={sellingPrice}
-            onChange={setSellingPrice}
-          />
-          <InputField
-            label="📦 Cantitate"
-            value={quantity}
-            onChange={setQuantity}
-          />
-          <InputField
-            label="🚚 Transport total (RON)"
-            value={transportCost}
-            onChange={setTransportCost}
-          />
-          <InputField
-            label="📊 TVA (%)"
-            value={tva}
-            onChange={setTva}
-          />
-          <InputField
-            label="🏛️ Taxă vamală (%)"
-            value={customTax}
-            onChange={setCustomTax}
-          />
-          <InputField
-            label="🛒 Comision eMAG (%)"
-            value={emagFee}
-            onChange={setEmagFee}
-          />
-          <InputField
-            label="⚙️ Alte costuri (RON)"
-            value={otherCosts}
-            onChange={setOtherCosts}
-          />
-        </div>
+        <InputField label="Preț achiziție / unitate (RON)" value={pricePerUnit} onChange={setPricePerUnit} />
+        <InputField label="Preț de vânzare (RON)" value={sellingPrice} onChange={setSellingPrice} />
+        <InputField label="Cantitate" value={quantity} onChange={setQuantity} />
+        <InputField label="Transport total (RON)" value={transportCost} onChange={setTransportCost} />
+        <InputField label="TVA (%)" value={tva} onChange={setTva} />
+        <InputField label="Taxă vamală (%)" value={customTax} onChange={setCustomTax} />
+        <InputField label="Comision eMAG (%)" value={emagFee} onChange={setEmagFee} />
+        <InputField label="Alte costuri (RON)" value={otherCosts} onChange={setOtherCosts} />
+        <InputField label="Marjă minimă dorită (%)" value={minMargin} onChange={setMinMargin} />
 
         <button
           onClick={calculateProfit}
-          className="w-full bg-green-600 hover:brightness-110 text-white py-2 rounded-lg font-semibold transition duration-300 mt-4 flex items-center justify-center gap-2"
+          className="w-full bg-green-600 hover:brightness-110 text-white py-2 rounded-lg font-semibold transition duration-300 mt-2 flex items-center justify-center gap-2"
         >
-          <FaCog /> Calculează Profitul
+          <FaCog /> Calculează
         </button>
 
         {results && (
-          <div className="bg-gray-50 rounded-xl p-4 mt-6 border">
-            <h2 className="font-bold mb-2 text-lg">📊 Rezultate</h2>
-            <Result label="Cost per unitate" value={results.costPerUnit + " RON"} />
-            <Result label="Cost total" value={results.totalCost + " RON"} />
-            <Result label="Venit total" value={results.totalRevenue + " RON"} />
-            <Result
-              label="Profit estimat"
-              value={results.estimatedProfit + " RON"}
-              highlight
-            />
-            <Result label="Marjă profit" value={results.profitMargin + " %"} />
+          <div className={`mt-4 p-4 rounded-lg text-sm font-medium border ${
+            results.status === "pierdere"
+              ? "bg-red-100 text-red-800 border-red-300"
+              : results.status === "sub marjă"
+              ? "bg-yellow-100 text-yellow-800 border-yellow-300"
+              : "bg-green-100 text-green-800 border-green-300"
+          }`}>
+            <p>Cost per unitate: {results.costPerUnit} RON</p>
+            <p>Cost total: {results.totalCost} RON</p>
+            <p>Venit total: {results.totalRevenue} RON</p>
+            <p>Profit estimat: {results.estimatedProfit} RON</p>
+            <p>Marjă profit: {results.profitMargin}%</p>
+            <p>
+              Status: <strong>{
+                results.status === "pierdere"
+                  ? "Pierdere!"
+                  : results.status === "sub marjă"
+                  ? "Sub marja minimă!"
+                  : "Profitabil!"
+              }</strong>
+            </p>
           </div>
         )}
       </div>
@@ -173,7 +153,7 @@ export default function ProfitCalculator() {
 
 function InputField({ label, value, onChange }) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col mb-2">
       <label className="text-sm font-medium mb-1">{label}</label>
       <input
         type="number"
@@ -183,13 +163,5 @@ function InputField({ label, value, onChange }) {
         min="0"
       />
     </div>
-  );
-}
-
-function Result({ label, value, highlight = false }) {
-  return (
-    <p className={`text-sm ${highlight ? "font-bold text-green-700" : ""}`}>
-      {label}: <span className="ml-1">{value}</span>
-    </p>
   );
 }
