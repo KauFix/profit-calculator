@@ -1,4 +1,4 @@
-import { FaEuroSign, $1 from "react-icons/fa";
+import { $1 from "react-icons/fa";
 
 export default function ProfitCalculator() {
   const [passwordInput, setPasswordInput] = useState("");
@@ -105,7 +105,7 @@ export default function ProfitCalculator() {
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <InputField icon={<FaEuroSign />} label="Preț achiziție / unitate (RON)" value={pricePerUnit} onChange={setPricePerUnit} />
+          <InputField icon={<FaTag />} label="Preț achiziție / unitate (RON)" value={pricePerUnit} onChange={setPricePerUnit} />
           <InputField icon={<FaTag />} label="Preț de vânzare (RON)" value={sellingPrice} onChange={setSellingPrice} />
           <InputField icon={<FaBoxes />} label="Cantitate" value={quantity} onChange={setQuantity} />
           <InputField icon={<FaTruck />} label="Transport total (RON)" value={transportCost} onChange={setTransportCost} />
