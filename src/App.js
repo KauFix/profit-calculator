@@ -9,7 +9,8 @@ import {
   FaShoppingCart,
   FaTools,
   FaCog,
-  FaBroom
+  FaBroom,
+  FaTrashAlt
 } from "react-icons/fa";
 
 export default function ProfitCalculator() {
@@ -104,6 +105,10 @@ export default function ProfitCalculator() {
     setResults(null);
   };
 
+  const clearHistory = () => {
+    setHistory([]);
+  };
+
   if (!authenticated) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4">
@@ -191,7 +196,15 @@ export default function ProfitCalculator() {
 
         {history.length > 0 && (
           <div className="mt-6">
-            <h3 className="font-bold text-lg mb-2">Istoric ultimele calcule:</h3>
+            <h3 className="font-bold text-lg mb-2 flex justify-between items-center">
+              Istoric ultimele calcule:
+              <button
+                onClick={clearHistory}
+                className="text-sm bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1 rounded-md flex items-center gap-1"
+              >
+                <FaTrashAlt /> Șterge istoricul
+              </button>
+            </h3>
             <ul className="space-y-1 text-sm">
               {history.map((item, idx) => (
                 <li key={idx} className="border p-2 rounded-md bg-gray-50">
