@@ -1,4 +1,16 @@
 import { useState } from "react";
+import {
+  FaLock,
+  FaEuroSign,
+  FaTag,
+  FaBox,
+  FaTruck,
+  FaPercent,
+  FaWarehouse,
+  FaShoppingCart,
+  FaCog,
+  FaChartBar,
+} from "react-icons/fa";
 
 export default function ProfitCalculator() {
   const [passwordInput, setPasswordInput] = useState("");
@@ -53,7 +65,8 @@ export default function ProfitCalculator() {
     const totalRevenue = selling * quantityNum;
     const emagCommission = (selling * emag) / 100 * quantityNum;
     const estimatedProfit = totalRevenue - totalCost - emagCommission;
-    const profitMargin = totalRevenue === 0 ? 0 : (estimatedProfit / totalRevenue) * 100;
+    const profitMargin =
+      totalRevenue === 0 ? 0 : (estimatedProfit / totalRevenue) * 100;
 
     setResults({
       costPerUnit: costPerUnit.toFixed(2),
@@ -66,115 +79,165 @@ export default function ProfitCalculator() {
 
   if (!authenticated) {
     return (
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "100px" }}>
-        <h2>Introdu parola pentru a accesa aplicația</h2>
-        <input
-          type="password"
-          value={passwordInput}
-          onChange={(e) => setPasswordInput(e.target.value)}
-          placeholder="Parolă"
-          style={{ padding: "8px", marginTop: "10px" }}
-        />
-        <button onClick={handleLogin} style={{ marginTop: "10px", padding: "8px 16px" }}>Intră</button>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4">
+        <div className="bg-white shadow-md rounded-xl p-6 w-full max-w-sm">
+          <h2 className="text-lg font-semibold mb-4 text-center flex items-center justify-center gap-2">
+            <FaLock /> Introdu parola
+          </h2>
+          <input
+            type="password"
+            value={passwordInput}
+            onChange={(e) => setPasswordInput(e.target.value)}
+            placeholder="Parolă"
+            className="w-full border border-gray-300 rounded-lg p-2 mb-4"
+          />
+          <button
+            onClick={handleLogin}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition duration-300"
+          >
+            Intră în aplicație
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-xl font-bold mb-4">Calculator de Profit</h1>
+    <div className="min-h-screen bg-gray-100 py-8 px-4">
+      <div className="max-w-xl mx-auto bg-white rounded-2xl shadow-xl p-6 space-y-4">
+        <h1 className="text-2xl font-bold text-center mb-2 flex items-center justify-center gap-2">
+          <FaChartBar /> Calculator de Profit
+        </h1>
 
-      <label>Preț achiziție/unitate</label>
-      <input
-        type="number"
-        value={pricePerUnit}
-        onChange={(e) => setPricePerUnit(e.target.value)}
-        className="w-full border p-2 mb-2"
-        placeholder="Ex: 10.5"
-      />
-
-      <label>Preț de vânzare</label>
-      <input
-        type="number"
-        value={sellingPrice}
-        onChange={(e) => setSellingPrice(e.target.value)}
-        className="w-full border p-2 mb-2"
-        placeholder="Ex: 15.0"
-      />
-
-      <label>Cantitate</label>
-      <input
-        type="number"
-        value={quantity}
-        onChange={(e) => setQuantity(e.target.value)}
-        className="w-full border p-2 mb-2"
-        placeholder="Ex: 5"
-        min="1"
-      />
-
-      <label>Transport total</label>
-      <input
-        type="number"
-        value={transportCost}
-        onChange={(e) => setTransportCost(e.target.value)}
-        className="w-full border p-2 mb-2"
-        placeholder="Ex: 20"
-      />
-
-      <label>TVA (%)</label>
-      <input
-        type="number"
-        value={tva}
-        onChange={(e) => setTva(e.target.value)}
-        className="w-full border p-2 mb-2"
-        placeholder="Ex: 19"
-        min="0"
-      />
-
-      <label>Taxă vamală (%)</label>
-      <input
-        type="number"
-        value={customTax}
-        onChange={(e) => setCustomTax(e.target.value)}
-        className="w-full border p-2 mb-2"
-        placeholder="Ex: 5"
-        min="0"
-      />
-
-      <label>Comision eMAG (%)</label>
-      <input
-        type="number"
-        value={emagFee}
-        onChange={(e) => setEmagFee(e.target.value)}
-        className="w-full border p-2 mb-2"
-        placeholder="Ex: 10"
-        min="0"
-      />
-
-      <label>Alte costuri totale</label>
-      <input
-        type="number"
-        value={otherCosts}
-        onChange={(e) => setOtherCosts(e.target.value)}
-        className="w-full border p-2 mb-2"
-        placeholder="Ex: 5"
-        min="0"
-      />
-
-      <button onClick={calculateProfit} className="bg-blue-500 text-white px-4 py-2 mt-4">
-        Calculează
-      </button>
-
-      {results && (
-        <div className="mt-4 border-t pt-4">
-          <h2 className="font-bold mb-2">Rezultate:</h2>
-          <p>Cost per unitate: {results.costPerUnit} lei</p>
-          <p>Cost total: {results.totalCost} lei</p>
-          <p>Venit total: {results.totalRevenue} lei</p>
-          <p>Profit estimat: {results.estimatedProfit} lei</p>
-          <p>Marjă profit: {results.profitMargin}%</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <InputField
+            label={
+              <>
+                <FaEuroSign className="inline mr-2" /> Preț achiziție/unitate
+              </>
+            }
+            value={pricePerUnit}
+            onChange={setPricePerUnit}
+          />
+          <InputField
+            label={
+              <>
+                <FaTag className="inline mr-2" /> Preț de vânzare
+              </>
+            }
+            value={sellingPrice}
+            onChange={setSellingPrice}
+          />
+          <InputField
+            label={
+              <>
+                <FaBox className="inline mr-2" /> Cantitate
+              </>
+            }
+            value={quantity}
+            onChange={setQuantity}
+          />
+          <InputField
+            label={
+              <>
+                <FaTruck className="inline mr-2" /> Transport total
+              </>
+            }
+            value={transportCost}
+            onChange={setTransportCost}
+          />
+          <InputField
+            label={
+              <>
+                <FaPercent className="inline mr-2" /> TVA (%)
+              </>
+            }
+            value={tva}
+            onChange={setTva}
+          />
+          <InputField
+            label={
+              <>
+                <FaWarehouse className="inline mr-2" /> Taxă vamală (%)
+              </>
+            }
+            value={customTax}
+            onChange={setCustomTax}
+          />
+          <InputField
+            label={
+              <>
+                <FaShoppingCart className="inline mr-2" /> Comision eMAG (%)
+              </>
+            }
+            value={emagFee}
+            onChange={setEmagFee}
+          />
+          <InputField
+            label={
+              <>
+                <FaCog className="inline mr-2" /> Alte costuri
+              </>
+            }
+            value={otherCosts}
+            onChange={setOtherCosts}
+          />
         </div>
-      )}
+
+        <button
+          onClick={calculateProfit}
+          className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-semibold transition duration-300 mt-4 flex items-center justify-center gap-2"
+        >
+          <FaCog /> Calculează Profitul
+        </button>
+
+        {results && (
+          <div className="bg-gray-50 rounded-xl p-4 mt-6 border">
+            <h2 className="font-bold mb-2 text-lg">📊 Rezultate</h2>
+            <Result
+              label="Cost per unitate"
+              value={results.costPerUnit + " lei"}
+            />
+            <Result label="Cost total" value={results.totalCost + " lei"} />
+            <Result
+              label="Venit total"
+              value={results.totalRevenue + " lei"}
+            />
+            <Result
+              label="Profit estimat"
+              value={results.estimatedProfit + " lei"}
+              highlight
+            />
+            <Result
+              label="Marjă profit"
+              value={results.profitMargin + " %"}
+            />
+          </div>
+        )}
+      </div>
     </div>
+  );
+}
+
+function InputField({ label, value, onChange }) {
+  return (
+    <div className="flex flex-col">
+      <label className="text-sm font-medium mb-1">{label}</label>
+      <input
+        type="number"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="border border-gray-300 rounded-lg p-2"
+        min="0"
+      />
+    </div>
+  );
+}
+
+function Result({ label, value, highlight = false }) {
+  return (
+    <p className={`text-sm ${highlight ? "font-bold text-green-700" : ""}`}>
+      {label}: <span className="ml-1">{value}</span>
+    </p>
   );
 }
