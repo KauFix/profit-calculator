@@ -1,10 +1,22 @@
-import { useState, useEffect } from "react";
-import { FaChartBar, FaTag, FaBoxes, FaTruck, FaPercentage, FaWarehouse, FaShoppingCart, FaTools, FaCog, FaLock } from "react-icons/fa";
+import { useState } from "react";
+import {
+  FaChartBar,
+  FaTag,
+  FaBoxes,
+  FaTruck,
+  FaPercentage,
+  FaWarehouse,
+  FaShoppingCart,
+  FaTools,
+  FaCog,
+  FaBroom
+} from "react-icons/fa";
 
 export default function ProfitCalculator() {
   const [passwordInput, setPasswordInput] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
 
+  const [productName, setProductName] = useState("");
   const [pricePerUnit, setPricePerUnit] = useState(0);
   const [sellingPrice, setSellingPrice] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -64,7 +76,8 @@ export default function ProfitCalculator() {
     if (estimatedProfit < 0) status = "pierdere";
     else if (profitMargin < minMarginNum) status = "sub marjă";
 
-    const resultData = {
+    const result = {
+      productName,
       costPerUnit: costPerUnit.toFixed(2),
       totalCost: totalCost.toFixed(2),
       totalRevenue: totalRevenue.toFixed(2),
@@ -73,8 +86,22 @@ export default function ProfitCalculator() {
       status,
     };
 
-    setResults(resultData);
-    setHistory((prev) => [resultData, ...prev.slice(0, 9)]);
+    setResults(result);
+    setHistory([result, ...history.slice(0, 9)]); // max 10 rezultate
+  };
+
+  const resetAll = () => {
+    setProductName("");
+    setPricePerUnit(0);
+    setSellingPrice(0);
+    setQuantity(1);
+    setTransportCost(0);
+    setTva(19);
+    setCustomTax(0);
+    setEmagFee(0);
+    setOtherCosts(0);
+    setMinMargin(40);
+    setResults(null);
   };
 
   if (!authenticated) {
@@ -82,7 +109,7 @@ export default function ProfitCalculator() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4">
         <div className="bg-white shadow-md rounded-xl p-6 w-full max-w-sm">
           <h2 className="text-lg font-semibold mb-4 text-center flex items-center justify-center gap-2">
-            <FaLock className="text-gray-500" /> Introdu parola
+            <FaChartBar /> Introdu parola
           </h2>
           <input
             type="password"
@@ -105,22 +132,22 @@ export default function ProfitCalculator() {
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4">
       <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-6 space-y-4">
-        <h1 className="text-2xl font-bold text-center mb-4 flex items-center justify-center gap-2">
-          <FaChartBar className="text-green-600" /> Calculator Profit
+        <h1 className="text-2xl font-bold text-center mb-4 flex items-center justify-center gap-2 text-green-600">
+          <FaChartBar /> Calculator Profit
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <InputField icon={<FaTag className="text-blue-500" />} label="Preț achiziție / unitate (RON)" value={pricePerUnit} onChange={setPricePerUnit} />
-          <InputField icon={<FaTag className="text-blue-500" />} label="Preț de vânzare (RON)" value={sellingPrice} onChange={setSellingPrice} />
-          <InputField icon={<FaBoxes className="text-yellow-600" />} label="Cantitate" value={quantity} onChange={setQuantity} />
-          <InputField icon={<FaTruck className="text-orange-500" />} label="Transport total (RON)" value={transportCost} onChange={setTransportCost} />
-          <InputField icon={<FaPercentage className="text-purple-600" />} label="TVA (%)" value={tva} onChange={setTva} />
-          <InputField icon={<FaWarehouse className="text-gray-700" />} label="Taxă vamală (%)" value={customTax} onChange={setCustomTax} />
-          <InputField icon={<FaShoppingCart className="text-pink-500" />} label="Comision eMAG (%)" value={emagFee} onChange={setEmagFee} />
-          <InputField icon={<FaTools className="text-red-500" />} label="Alte costuri (RON)" value={otherCosts} onChange={setOtherCosts} />
+          <InputField label="Nume produs" value={productName} onChange={setProductName} icon={<FaTag className="text-gray-600" />} />
+          <InputField label="Preț achiziție / unitate (RON)" value={pricePerUnit} onChange={setPricePerUnit} icon={<FaTag className="text-blue-500" />} />
+          <InputField label="Preț de vânzare (RON)" value={sellingPrice} onChange={setSellingPrice} icon={<FaTag className="text-black" />} />
+          <InputField label="Cantitate" value={quantity} onChange={setQuantity} icon={<FaBoxes className="text-yellow-600" />} />
+          <InputField label="Transport total (RON)" value={transportCost} onChange={setTransportCost} icon={<FaTruck className="text-orange-500" />} />
+          <InputField label="TVA (%)" value={tva} onChange={setTva} icon={<FaPercentage className="text-purple-600" />} />
+          <InputField label="Taxă vamală (%)" value={customTax} onChange={setCustomTax} icon={<FaWarehouse className="text-gray-700" />} />
+          <InputField label="Comision eMAG (%)" value={emagFee} onChange={setEmagFee} icon={<FaShoppingCart className="text-pink-500" />} />
+          <InputField label="Alte costuri (RON)" value={otherCosts} onChange={setOtherCosts} icon={<FaTools className="text-red-500" />} />
+          <InputField label="Marjă minimă dorită (%)" value={minMargin} onChange={setMinMargin} icon={<FaPercentage className="text-black" />} />
         </div>
-
-        <InputField icon={<FaPercentage className="text-purple-600" />} label="Marjă minimă dorită (%)" value={minMargin} onChange={setMinMargin} />
 
         <button
           onClick={calculateProfit}
@@ -130,21 +157,10 @@ export default function ProfitCalculator() {
         </button>
 
         <button
-          onClick={() => {
-            setPricePerUnit(0);
-            setSellingPrice(0);
-            setQuantity(1);
-            setTransportCost(0);
-            setTva(19);
-            setCustomTax(0);
-            setEmagFee(0);
-            setOtherCosts(0);
-            setMinMargin(40);
-            setResults(null);
-          }}
+          onClick={resetAll}
           className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-semibold transition duration-300 mt-2 flex items-center justify-center gap-2"
         >
-          <FaCog className="text-white" /> Resetează
+          <FaBroom /> Resetează
         </button>
 
         {results && (
@@ -155,6 +171,7 @@ export default function ProfitCalculator() {
               ? "bg-yellow-100 text-yellow-800 border-yellow-300"
               : "bg-green-100 text-green-800 border-green-300"
           }`}>
+            <p><strong>{results.productName}</strong></p>
             <p>Cost per unitate: {results.costPerUnit} RON</p>
             <p>Cost total: {results.totalCost} RON</p>
             <p>Venit total: {results.totalRevenue} RON</p>
@@ -174,11 +191,11 @@ export default function ProfitCalculator() {
 
         {history.length > 0 && (
           <div className="mt-6">
-            <h2 className="text-lg font-semibold mb-2">Istoric ultimele 10 calcule:</h2>
-            <ul className="text-sm space-y-1 list-disc list-inside">
-              {history.map((item, index) => (
-                <li key={index}>
-                  Profit: {item.estimatedProfit} RON – Marjă: {item.profitMargin}% – {item.status}
+            <h3 className="font-bold text-lg mb-2">Istoric ultimele calcule:</h3>
+            <ul className="space-y-1 text-sm">
+              {history.map((item, idx) => (
+                <li key={idx} className="border p-2 rounded-md bg-gray-50">
+                  <strong>{item.productName}</strong>: {item.estimatedProfit} RON profit, {item.profitMargin}% marjă – <em>{item.status}</em>
                 </li>
               ))}
             </ul>
@@ -196,11 +213,10 @@ function InputField({ label, value, onChange, icon }) {
         <span className="mr-1 inline-block align-middle">{icon}</span> {label}
       </label>
       <input
-        type="number"
+        type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="border border-gray-300 rounded-lg p-2 shadow-sm focus:ring focus:outline-none"
-        min="0"
       />
     </div>
   );
