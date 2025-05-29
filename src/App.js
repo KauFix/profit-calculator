@@ -184,8 +184,8 @@ export default function ProfitCalculator() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <InputField label="Nume produs" value={productName} onChange={setProductName} icon={<FaTag className="text-gray-600" />} />
-          <InputField label="Preț achiziție / unitate (RON)" value={pricePerUnit} onChange={setPricePerUnit} icon={<FaTag className="text-blue-500" />} />
-          <InputField label="Preț de vânzare (RON)" value={sellingPrice} onChange={setSellingPrice} icon={<FaTag className="text-black" />} />
+          <InputField label="Preț achiziție din China / unitate (RON)" value={pricePerUnit} onChange={setPricePerUnit} icon={<FaTag className="text-blue-500" />} />
+          <InputField label="Preț de vânzare Romania (RON)" value={sellingPrice} onChange={setSellingPrice} icon={<FaTag className="text-black" />} />
           <InputField label="Cantitate" value={quantity} onChange={setQuantity} icon={<FaBoxes className="text-yellow-600" />} />
           <InputField label="Transport total (RON)" value={transportCost} onChange={setTransportCost} icon={<FaTruck className="text-orange-500" />} />
           <InputField label="TVA (%)" value={tva} onChange={setTva} icon={<FaPercentage className="text-purple-600" />} />
