@@ -1,5 +1,17 @@
 import { useState } from "react";
-import { FaLock, FaChartBar, FaCog } from "react-icons/fa";
+import {
+  FaLock,
+  FaChartBar,
+  FaCog,
+  FaMoneyBillWave,
+  FaTag,
+  FaBoxes,
+  FaTruck,
+  FaPercentage,
+  FaWarehouse,
+  FaShoppingCart,
+  FaTools
+} from "react-icons/fa";
 
 export default function ProfitCalculator() {
   const [passwordInput, setPasswordInput] = useState("");
@@ -100,20 +112,23 @@ export default function ProfitCalculator() {
 
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4">
-      <div className="max-w-xl mx-auto bg-white rounded-2xl shadow-xl p-6 space-y-4">
+      <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-6 space-y-4">
         <h1 className="text-2xl font-bold text-center mb-4 flex items-center justify-center gap-2">
           <FaChartBar /> Calculator Profit
         </h1>
 
-        <InputField label="Preț achiziție / unitate (RON)" value={pricePerUnit} onChange={setPricePerUnit} />
-        <InputField label="Preț de vânzare (RON)" value={sellingPrice} onChange={setSellingPrice} />
-        <InputField label="Cantitate" value={quantity} onChange={setQuantity} />
-        <InputField label="Transport total (RON)" value={transportCost} onChange={setTransportCost} />
-        <InputField label="TVA (%)" value={tva} onChange={setTva} />
-        <InputField label="Taxă vamală (%)" value={customTax} onChange={setCustomTax} />
-        <InputField label="Comision eMAG (%)" value={emagFee} onChange={setEmagFee} />
-        <InputField label="Alte costuri (RON)" value={otherCosts} onChange={setOtherCosts} />
-        <InputField label="Marjă minimă dorită (%)" value={minMargin} onChange={setMinMargin} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <InputField icon={<FaEuroSign />} label="Preț achiziție / unitate (RON)" value={pricePerUnit} onChange={setPricePerUnit} />
+          <InputField icon={<FaTag />} label="Preț de vânzare (RON)" value={sellingPrice} onChange={setSellingPrice} />
+          <InputField icon={<FaBoxes />} label="Cantitate" value={quantity} onChange={setQuantity} />
+          <InputField icon={<FaTruck />} label="Transport total (RON)" value={transportCost} onChange={setTransportCost} />
+          <InputField icon={<FaPercentage />} label="TVA (%)" value={tva} onChange={setTva} />
+          <InputField icon={<FaWarehouse />} label="Taxă vamală (%)" value={customTax} onChange={setCustomTax} />
+          <InputField icon={<FaShoppingCart />} label="Comision eMAG (%)" value={emagFee} onChange={setEmagFee} />
+          <InputField icon={<FaTools />} label="Alte costuri (RON)" value={otherCosts} onChange={setOtherCosts} />
+        </div>
+
+        <InputField icon={<FaPercentage />} label="Marjă minimă dorită (%)" value={minMargin} onChange={setMinMargin} />
 
         <button
           onClick={calculateProfit}
@@ -151,10 +166,12 @@ export default function ProfitCalculator() {
   );
 }
 
-function InputField({ label, value, onChange }) {
+function InputField({ label, value, onChange, icon }) {
   return (
-    <div className="flex flex-col mb-2">
-      <label className="text-sm font-medium mb-1">{label}</label>
+    <div className="flex flex-col">
+      <label className="text-sm font-medium mb-1">
+        <span className="mr-1 inline-block align-middle">{icon}</span> {label}
+      </label>
       <input
         type="number"
         value={value}
